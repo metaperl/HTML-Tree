@@ -1022,7 +1022,7 @@ definition of empty in L<$h->is_empty()>.
 
 sub prune {
   my ($self)=@_;
-  my @elem = $tree->look_down('_tag' => qr/.+/);
+  my @elem = $self->look_down('_tag' => qr/.+/);
   for my $elem (@elem) {
     $elem->delete if $elem->is_empty();
   }
