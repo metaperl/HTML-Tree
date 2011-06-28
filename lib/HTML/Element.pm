@@ -1013,6 +1013,22 @@ sub replace_with {
     return $self;
 }
 
+=head2 $h->prune()
+
+This removes C<$h> all elements from an HTML tree which are empty, per the
+definition of empty in L<$h->is_empty()>.
+
+=cut
+
+sub prune {
+  my ($self)=@_;
+  my @elem = $tree->look_down('_tag' => qr/.+/);
+  for my $elem (@elem) {
+    $elem->delete if $elem->is_empty();
+  }
+}
+
+
 =head2 $h->preinsert($element_or_text...)
 
 Inserts the given nodes right BEFORE C<$h> in C<$h>'s parent's
@@ -1105,7 +1121,7 @@ sub delete_content {
     $_[0];
 }
 
-=head2 $h->delete() destroy destroy_content
+=head2 $h->delete(), $h->destroy(), $h->destroy_content()
 
 Detaches this element from its parent (if it has one) and explicitly
 destroys the element and all its descendants.  The return value is
