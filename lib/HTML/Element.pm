@@ -1019,13 +1019,29 @@ This removes C<$h> all elements from an HTML tree which are empty, per the
 definition of empty in L<$h->is_empty()>.
 
 =cut
+sub _only_empty_content {
+  my ($self)=@_;
+  my @c = $self->content_list;
+  my $length  = scalar @c;
+
+  #use Data::Dumper;
+  #warn sprintf 'Testing %s (%s)' , $self->starttag, Dumper(\@c);
+  #warn sprintf "\t\tlength: %d undef: %s", $isarray, $length, $undef;
+
+  scalar @c == 1 and not length($c[0]);
+}
 
 sub prune {
   my ($self)=@_;
-  my @elem = $self->look_down('_tag' => qr/.+/);
-  for my $elem (@elem) {
-    $elem->delete if $elem->is_empty();
+  
+  for my $c ($self->content_list) {
+    next unless ref $c;
+    #warn "C: " . Dumper($c);
+    $c->prune;
   }
+
+  # post-order:
+  $self->delete if ($self->is_empty or $self->_only_empty_content);
 }
 
 
@@ -1129,7 +1145,7 @@ undef.
 
 Perl uses garbage collection based on reference counting; when no
 references to a data structure exist, it's implicitly destroyed --
-i.e., when no value anywhere points to a given object anymore, Perl
+ i.e., when no value anywhere points to a given object anymore, Perl
 knows it can free up the memory that the now-unused object occupies.
 
 But this fails with HTML::Element trees, because a parent element
