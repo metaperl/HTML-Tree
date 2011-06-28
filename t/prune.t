@@ -5,6 +5,7 @@ use warnings;
 use strict;
 
 use Test::More;
+use Test::XML;
 
 BEGIN {
     use_ok('XML::TreeBuilder');
@@ -44,11 +45,10 @@ my $expected = '<note onError="stopOnError">
       </kim>
 
     </body>
-</note>';
+</note>
+';
 
-#warn $root->as_XML;
-
-is($root->as_XML, $expected, 'test pruning');
+is_xml($root->as_XML, $expected, 'test pruning');
 
 
 
