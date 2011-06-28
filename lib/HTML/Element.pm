@@ -1278,7 +1278,7 @@ sub normalize_content {
 =head2 $h->delete_ignorable_whitespace()
 
 This traverses under C<$h> and deletes any text segments that are ignorable
-whitespace.  You should not use this if C<$h> under a 'pre' element.
+whitespace.  You should not use this if C<$h> is under a 'pre' element.
 
 =cut
 
